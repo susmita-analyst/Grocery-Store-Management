@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery Mart</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="logo1.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">
+            <img src="logo1.png" alt="Logo" class="logo-icon"> <!-- Replace with your logo image -->
+            <span class="logo-text">GroceryMart</span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#product-list">Products</a>
+            <a href="admin.html">Admin</a>
+        </div>
+        <!-- Cart Icon with Count -->
+<div class="cart-icon" onclick="window.location.href='cart.html'">
+    <i class="fas fa-shopping-cart"></i> <span id="cart-count">0</span>
+</div>
+
+    </nav>
+
+    <!-- Container for Centered Content -->
+    <div class="container">
+        <!-- Header Image and Search -->
+        <header>
+            <img src="banner-bg.webp" alt="Grocery Store" class="header-image">
+            <div class="header-text">
+                <h1><span class="highlight">GROCERY</span><br>STORE MANAGEMENT</h1>
+                <p><i>Your Source for Fresh and Affordable Essentials</i></p>
+            </div>
+            
+        </header>
+
+        <!-- Our Services Section -->
+<section id="our-services">
+    <h2 style="font-size: 2.5rem; font-weight: bold; margin-top: 10px; margin-bottom: 20px; text-align: center;">
+        <span style="color: black;">Our</span> 
+        <span style="color: #FF6347;">Services</span>
+    </h2>
+    <div class="services-container">
+        <div class="service-box">
+            <img src="images/feature-img-1.png" alt="Fast Delivery" class="service-icon">
+            <h3>Fresh & Organic</h3>
+            <p>Fresh vegetables and fruits in cheap price.</p>
+        </div>
+        <div class="service-box">
+            <img src="images/feature-img-2.png" alt="Quality Products" class="service-icon">
+            <h3>Free Delivery</h3>
+            <p>We always do fast delivery.</p>
+        </div>
+        <div class="service-box">
+            <img src="images/feature-img-3.png" alt="24/7 Support" class="service-icon">
+            <h3>Easy Payment</h3>
+            <p>It's very easy to pay on our website</p>
+        </div>
+    </div>
+</section>
+
+
+        <!-- Featured Products Section -->
+        <section class="featured-products" id="products">
+            <input type="text" id="searchBar" placeholder="Search for products..." onkeyup="filterProducts()">
+            <h2><span class="featured">Featured</span> <span class="products">Products</span></h2>
+            <div class="product-container" id="product-list">
+                <!-- Dynamic product cards will populate here from script.js -->
+            </div>
+        </section>
+
+
+        <!-- Cart Details Modal -->
+        <div id="cart-details" class="cart-details-modal">
+            <h2>Cart Details</h2>
+            <ul id="cart-items"></ul>
+            <p>Total Amount: ₹<span id="total-amount">0.00</span></p>
+            <button onclick="closeCartDetails()">Close</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Grocery Store. All Rights Reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="logo1.png" type="image/x-icon">
+    <title>Shopping Cart</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Cart Container */
+        .cart-container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Cart Item Styles */
+        .cart-item {
+            list-style: none;
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .cart-item span {
+            margin-right: 10px;
+        }
+
+        .cart-item button {
+            background-color: #007BFF;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .cart-item button:hover {
+            background-color: #0056b3;
+        }
+
+        .cart-item .remove-btn {
+            background-color: #e74c3c;
+        }
+
+        .cart-item .remove-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* Total Price Section */
+        #total-price {
+            margin-top: 30px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Payment and Close Button Styles */
+        #pay-button, #close-cart {
+            padding: 12px 25px;
+            margin-top: 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #pay-button {
+            background-color: #28a745;
+            color: white;
+            margin-right: 10px;
+        }
+
+        #pay-button:hover {
+            background-color: #218838;
+        }
+
+        #close-cart {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        #close-cart:hover {
+            background-color: #c82333;
+        }
+
+        /* QR Modal */
+        .qr-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qr-modal-content {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            width: 300px;
+            max-width: 90%;
+            position: relative;
+            max-height: 80vh; /* Limit modal height */
+            overflow-y: auto;
+        }
+
+        .qr-modal .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #aaa;
+            font-size: 30px;
+            cursor: pointer;
+        }
+
+        .qr-modal .close-btn:hover {
+            color: #333;
+        }
+
+        #qr-code-image {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border: 2px solid #ddd;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        #qr-modal .upload-label {
+            font-size: 14px;
+            margin-top: 10px;
+            display: block;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Styling for Choose File Button */
+#qr-modal input[type="file"] {
+    display: block;
+    margin: 10px auto;
+    padding: 8px;
+    font-size: 14px;
+    border: 2px dashed #007bff;
+    border-radius: 8px;
+    background-color: #f4f7fc;
+    color: #007bff;
+    cursor: pointer;
+    width: 80%;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+#qr-modal input[type="file"]:hover {
+    background-color: #e7f1ff;
+    border-color: #0056b3;
+}
+
+/* Styling for Cancel Order Button */
+#qr-modal button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: block;
+    width: 80%;
+    max-width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#qr-modal button:hover {
+    background-color: #c82333;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .cart-container {
+                padding: 20px;
+            }
+
+            #total-price {
+                font-size: 18px;
+            }
+
+            #pay-button, #close-cart {
+                font-size: 16px;
+            }
+
+            .cart-item {
+                font-size: 14px;
+            }
+
+            .cart-item button {
+                font-size: 12px;
+                padding: 5px 10px;
+            }
+        }
+        .home-icon {
+            position: fixed;
+            top: 20px; /* Adjust the distance from the top */
+            left: 20px; /* Adjust the distance from the left */
+            font-size: 30px;
+            color: #007bff;
+            cursor: pointer;
+            z-index: 1000; /* Ensure it stays on top */
+        }
+
+        .home-icon:hover {
+            color: #0056b3; /* Hover effect */
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="cart-container">
+        <a href="index.html" title="Home" class="home-icon">
+            <i class="fas fa-home" style="font-size: 30px; color: #007bff;"></i>
+        </a>
+        <h2>Your Cart</h2>
+        <ul id="cart-items-list"></ul>
+        <div id="total-price">
+            <strong>Total: ₹<span id="total-amount-cart">0.00</span></strong>
+        </div>
+
+        <div>
+            
+            <button id="pay-button">Proceed to Payment</button>
+            <button id="close-cart" onclick="closeCart()">Cancel Order</button>
+        </div>
+
+        <div id="qr-modal" class="qr-modal">
+            <div class="qr-modal-content">
+                <h3>Pay using the QR Code</h3>
+                <p>Total Amount: ₹<span id="total-modal-amount"></span></p>
+                <img id="qr-code-image" alt="QR Code">
+                <label for="payment-screenshot" class="upload-label">Insert Payment Screenshot:</label>
+                <input type="file" id="payment-screenshot" accept="image/*" onchange="handleFileUpload(event)">
+                <button onclick="closePaymentPopup()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let totalAmount = 0;
+
+        // Function to display the cart details
+        function displayCartDetails() {
+            const cartItemsList = document.getElementById('cart-items-list');
+            const totalAmountElement = document.getElementById('total-amount-cart');
+            cartItemsList.innerHTML = '';
+            totalAmount = 0;
+
+            cart.forEach(item => {
+                const cartItem = document.createElement('li');
+                cartItem.classList.add('cart-item');
+
+                cartItem.innerHTML = `
+                    <span>${item.name} (₹${item.price.toFixed(2)} / per KG)</span>
+                    <span>Qty: 
+                        <button onclick="updateQuantity(${item.id}, -1)">-</button>
+                        ${item.quantity}
+                        <button onclick="updateQuantity(${item.id}, 1)">+</button>
+                    </span>
+                    <span>Total: ₹${(item.quantity * item.price).toFixed(2)}</span>
+                    <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
+                `;
+                cartItemsList.appendChild(cartItem);
+                totalAmount += item.price * item.quantity;
+            });
+
+            totalAmountElement.textContent = totalAmount.toFixed(2);
+        }
+
+        // Function to update the quantity of an item
+        function updateQuantity(productId, change) {
+            const product = cart.find(p => p.id === productId);
+            if (product) {
+                product.quantity += change;
+                if (product.quantity <= 0) {
+                    product.quantity = 1;
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+                displayCartDetails();
+            }
+        }
+
+        // Function to remove an item from the cart
+        function removeFromCart(productId) {
+            cart = cart.filter(p => p.id !== productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCartDetails();
+        }
+
+        // Proceed to payment
+        document.getElementById('pay-button').addEventListener('click', function () {
+            const totalAmount = document.getElementById('total-amount-cart').textContent;
+            showPaymentPopup(totalAmount);
+        });
+
+        // Show the QR code payment modal
+        function showPaymentPopup(totalAmount) {
+            const modal = document.getElementById('qr-modal');
+            document.getElementById('total-modal-amount').textContent = totalAmount;
+            document.getElementById('qr-code-image').src = 'myqrcode.png';
+            modal.style.display = 'flex';
+        }
+
+        // Handle file upload
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                alert('Let us some more time to confirm your order!!!');
+                closePaymentPopup();
+            } else {
+                alert('Please upload a valid file.');
+            }
+        }
+
+        // Close the payment modal
+        function closePaymentPopup() {
+            const modal = document.getElementById('qr-modal');
+            modal.style.display = 'none';
+        }
+        // Function to close the cart and reset the cart items
+        function closeCart() {
+            // Reset the cart array in localStorage
+            localStorage.removeItem('cart');
+            cart = [];  // Empty the cart array
+            
+            // Reset the cart display
+            displayCartDetails();
+            
+            // Optionally hide the QR modal if it is open
+            const qrModal = document.getElementById('qr-modal');
+            if (qrModal.style.display === 'flex') {
+                qrModal.style.display = 'none';  // Hide the modal if it's open
+            }
+        }
+
+        // Initialize the cart display
+        displayCartDetails();
+
+
+    </script>
+</body>
+</html>

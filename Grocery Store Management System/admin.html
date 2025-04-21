@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="logo1.png" type="image/x-icon">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Reset basic margins and paddings */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    
+        /* Body and general layout */
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            height: 100vh;
+            background-color: #eef2f7; /* Light background */
+        }
+    
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(to bottom, #2980b9, #633078);
+            padding: 20px 10px;
+            color: #fff;
+            position: fixed;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+    
+        .sidebar .logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #ecf0f1; /* Light text for logo */
+        }
+    
+        .sidebar a {
+            display: block;
+            color: #fff;
+            padding: 12px;
+            text-decoration: none;
+            font-size: 18px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+    
+        .sidebar a:hover {
+            background-color: #2c3e50; /* Subtle dark shade for hover */
+        }
+    
+        .sidebar i {
+            margin-right: 10px;
+        }
+    
+        /* Top bar styles */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to right, #2980b9, #8e44ad);
+            padding: 15px 30px;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 20;
+        }
+    
+        .topbar .search-box input {
+            padding: 8px 20px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+    
+        .topbar .user-profile {
+            display: flex;
+            align-items: center;
+        }
+    
+        .topbar .user-profile img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+    
+        /* Content area */
+        .content {
+            margin-left: 250px;
+            margin-top: 70px;
+            padding: 30px;
+            width: 100%;
+            height: 100%;
+            background-color: #fff; /* White background for content */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+    
+        /* Dashboard cards */
+        .dashboard-cards {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+    
+        .card {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            width: 200px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+    
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+        }
+    
+        .card i {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: #16a085; /* Soft green for icons */
+        }
+    
+        .card h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #34495e; /* Dark color for text */
+        }
+    
+        .card p {
+            font-size: 16px;
+            color: #7f8c8d; /* Lighter text for descriptions */
+        }
+    
+        /* Order Table */
+        table {
+            width: 100%;
+            margin-top: 30px;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+    
+        table th, table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    
+        table th {
+            background-color: #2980b9; /* Bright blue header */
+            color: white;
+        }
+    
+        table td {
+            color: #34495e;
+        }
+    
+        /* Profit/Loss Arrow Styles */
+        span {
+            font-size: 16px;
+            font-weight: bold;
+        }
+    
+        span[style="color: green;"] {
+            color: #27ae60; /* Green for profit */
+        }
+    
+        span[style="color: red;"] {
+            color: #e74c3c; /* Red for loss */
+        }
+    
+        /* Responsive design */
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+                padding: 10px;
+            }
+    
+            .content {
+                margin-left: 200px;
+            }
+    
+            .dashboard-cards {
+                flex-direction: column;
+                gap: 20px;
+            }
+    
+            .topbar {
+                padding: 10px 20px;
+            }
+        }
+    </style>
+    
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">Admin Panel</div>
+        <a href="admin.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="index.html#product-list"><i class="fas fa-boxes"></i> Products</a>
+        <a href="#"><i class="fas fa-cogs"></i> Settings</a>
+        <a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="topbar">
+        <div class="search-box">
+            <input type="text" placeholder="Search...">
+        </div>
+        <div class="user-profile">
+            <img src="images/admin.jpg" alt="User">
+            <span>Admin</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Dashboard Cards -->
+        <div class="dashboard-cards">
+            <div class="card">
+                <i class="fas fa-users"></i>
+                <h3>150</h3>
+                <p>Total Users</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-boxes"></i>
+                <h3>50</h3>
+                <p>Total Products</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-chart-line"></i>
+                <h3>100</h3>
+                <p>Sales Today</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-cogs"></i>
+                <h3>20</h3>
+                <p>Settings Changes</p>
+            </div>
+        </div>
+
+<!-- Sales Data Table -->
+<h2>Sales Data</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Product ID</th>
+            <th>Category</th>
+            <th>Quantity Sold</th>
+            <th>Avg Price</th>
+            <th>Profit/Loss</th>
+            <th>Total Sales</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Example Sales Data -->
+        <tr>
+            <td>GS001</td>
+            <td>Fruits & Vegetables</td>
+            <td>188</td>
+            <td>₹110</td>
+            <td><span style="color: green;">&#8593; ₹2K</span></td> <!-- Green Upward Arrow for Profit -->
+            <td>₹20.6K</td>
+        </tr>
+        <tr>
+            <td>GS002</td>
+            <td>Diary & Bread</td>
+            <td>078</td>
+            <td>₹120</td>
+            <td><span style="color: red;">&#8595; ₹1.2K</span></td> <!-- Red Downward Arrow for Loss -->
+            <td>₹9.3K</td>
+        </tr>
+        <tr>
+            <td>GS003</td>
+            <td>Rice, Atta & Dal</td>
+            <td>045</td>
+            <td>₹750</td>
+            <td><span style="color: green;">&#8593; ₹4.2K</span></td> <!-- Green Upward Arrow for Profit -->
+            <td>₹33.7K</td>
+        </tr>
+        <tr>
+            <td>GS004</td>
+            <td>Chocolates & Sweets</td>
+            <td>195</td>
+            <td>₹95</td>
+            <td><span style="color: red;">&#8595; ₹0.4K</span></td> <!-- Green Upward Arrow for Profit -->
+            <td>₹18.5K</td>
+        </tr>
+        <tr>
+            <td>GS005</td>
+            <td>Instant & Frozen Food</td>
+            <td>188</td>
+            <td>₹200</td>
+            <td><span style="color: green;">&#8593; ₹1.8K</span></td> <!-- Green Upward Arrow for Profit -->
+            <td>₹37.6K</td>
+        </tr>
+    </tbody>
+</table>
+
+
+        <!-- Sales Graph -->
+        <h2  style="margin-top: 20px;">Sales Over Time</h2>
+        <canvas id="salesChart" width="400" height="200"></canvas>
+
+        <script>
+            // Sample data for the sales chart
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            const salesChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['June', 'July', 'Aug', 'Sept', 'Oct', 'Nov'],
+                    datasets: [{
+                        label: 'Sales (₹)',
+                        data: [150, 200, 250, 300, 400, 500],
+                        borderColor: '#3498db',
+                        fill: false,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+    </div>
+
+    <!-- JavaScript for interactivity -->
+    <script>
+        // Example: Search function (if you plan to make the search functional)
+        const searchBox = document.querySelector('.search-box input');
+        searchBox.addEventListener('input', function() {
+            // Implement search functionality here
+        });
+    </script>
+
+</body>
+</html>
